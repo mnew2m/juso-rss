@@ -2,21 +2,24 @@ name: Generate Juso RSS
 
 on:
   schedule:
-    - cron: '0 * * * *' # 매 시간 0분에 자동 실행
-  workflow_dispatch: # 수동 실행 버튼 활성화
+    - cron: '0 * * * *' # 매 시간 실행
+  workflow_dispatch: # 수동 실행 버튼
+
+permissions:
+  contents: write # 워크플로가 레포지토리에 푸시할 수 있도록 권한 부여
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.10'
       - run: pip install -r requirements.txt
       - run: python main.py
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./
